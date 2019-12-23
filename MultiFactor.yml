@@ -1,0 +1,10 @@
+---
+  - hosts: all
+    gather_facts: off
+    vars_prompt:
+      - name: MuserName
+        prompt: "Enter required username to generate code: "
+        default: "iservermate"
+        private: no
+    roles:
+      - MultiFactor
