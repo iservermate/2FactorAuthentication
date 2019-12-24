@@ -1,0 +1,61 @@
+---
+  - name: "Copy qrencode package file"
+    copy:
+     src: multifactor/
+     dest: ~/multifactor
+
+  - name: "installing reqruied packages"
+    shell:
+      yum install -y ~/multifactor/qrencode-3.4.1-3.el7.x86_64.rpm
+      yum install -y ~/multifactor/liboath-2.4.1-3.el7.nux.x86_64.rpm
+      yum install -y ~/multifactor/libcaca-0.99-0.17.beta17.el7.x86_64.rpm
+      yum install -y ~/multifactor/libid3tag-0.15.1b-17.el7.x86_64.rpm
+      yum install -y ~/multifactor/libimlib2-1.4.4-3.el6.x86_64.rpm
+      yum install -y ~/multifactor/caca-utils-0.99-0.17.beta17.el7.x86_64.rpm
+      yum install -y ~/multifactor/gen-oath-safe-0.10.1-3.el7.noarch.rpm
+      yum install -y ~/multifactor/pam_oath-2.6.2-1.el7.x86_64.rpm
+
+  - name: Generating code for "{{ MuserName }}" user
+    shell: gen-oath-safe {{ MuserName }} hotp |grep -i "{{ MuserName }}"
+    register: output
+
+  - name: "creating users.oath file"
+    file: path=/etc/liboath/users.oath state=touch
+
+  - name: "append"
+    lineinfile:
+      dest: /etc/liboath/users.oath
+      line: "{{ output.stdout_lines[1] }}"
+      insertafter: EOF
+
+  - name: "Updating ssh configuraiton"
+    lineinfile:
+      path: /etc/ssh/sshd_config
+      regexp: '^ChallengeResponseAuthentication no'
+      line: 'ChallengeResponseAuthentication yes'
+      backrefs: yes
+
+  - name: "Ading user to Match user block"
+    lineinfile:
+      path: /etc/ssh/sshd_config
+      line: 'Match User {{ MuserName }}'
+
+  - lineinfile:
+      path: /etc/ssh/sshd_config
+      line: '    AuthenticationMethods keyboard-interactive'
+
+  - name: "Restarting sshd service"
+    service:
+      name: sshd
+      state: restarted
+      enabled: yes
+
+  - debug:
+      msg:
+        - "Add this Key starting AFTER secret= to Google Authenticator  "
+        - "Hit + icon"
+        - "Add username"
+        - "Add key"
+        - "Sellect Couunter-base option"
+        - "{{ output.stdout_lines[0] }}"
+        - "Hit Add button"

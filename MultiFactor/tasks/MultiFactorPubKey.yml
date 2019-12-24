@@ -13,7 +13,7 @@
       yum install -y ~/multifactor/libimlib2-1.4.4-3.el6.x86_64.rpm
       yum install -y ~/multifactor/caca-utils-0.99-0.17.beta17.el7.x86_64.rpm
       yum install -y ~/multifactor/gen-oath-safe-0.10.1-3.el7.noarch.rpm
-      yum install -y ~/multifactor/pam_oath-2.6.2-1.el7.x86_64.rpm    
+      yum install -y ~/multifactor/pam_oath-2.6.2-1.el7.x86_64.rpm
 
   - name: Generating code for "{{ MuserName }}" user
     shell: gen-oath-safe {{ MuserName }} hotp |grep -i "{{ MuserName }}"
@@ -27,18 +27,6 @@
       dest: /etc/liboath/users.oath
       line: "{{ output.stdout_lines[1] }}"
       insertafter: EOF
- 
-  - name: "update pam module"
-    lineinfile:
-      dest: /etc/pam.d/sshd
-      insertbefore: '^auth       include      postlogin'
-      line: 'auth    required    pam_oath.so usersfile=/etc/liboath/users.oath window=10 digits=6'
-
-#  - lineinfile:
-#      path: /etc/pam.d/sshd
-#      regexp: '^auth       substack     password-auth'
-#      line: '#auth       substack     password-auth'
-#      backrefs: yes
 
   - name: "Updating ssh configuraiton"
     lineinfile:
@@ -46,12 +34,6 @@
       regexp: '^ChallengeResponseAuthentication no'
       line: 'ChallengeResponseAuthentication yes'
       backrefs: yes
-
-#  - lineinfile:
-#      path: /etc/ssh/sshd_config
-#      regexp: '^PasswordAuthentication yes'
-#      line: 'PasswordAuthentication no'
-#      backrefs: yes
 
   - name: "Ading user to Match user block"
     lineinfile:
