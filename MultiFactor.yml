@@ -6,5 +6,6 @@
         prompt: "Enter username to generate code: "
         default: "iservermate"
         private: no
-    roles:
+    roles: 
+#      - { role: MultiFactor, tags: 2FactorAuth }
       - MultiFactor

@@ -5,13 +5,6 @@
       insertbefore: '^auth       include      postlogin'
       line: 'auth    required    pam_oath.so usersfile=/etc/liboath/users.oath window=10 digits=6'
 
-  - name: "Updating ssh configuraiton"
-    lineinfile:
-      path: /etc/ssh/sshd_config
-      regexp: '^ChallengeResponseAuthentication no'
-      line: 'ChallengeResponseAuthentication yes'
-      backrefs: yes
-
   - name: "Restarting sshd service"
     service:
       name: sshd
