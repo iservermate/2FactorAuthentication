@@ -31,15 +31,14 @@
   - name: "update pam module"
     lineinfile:
       dest: /etc/pam.d/sshd
-      regexp: '^auth       include      postlogin'
       insertbefore: '^auth       include      postlogin'
       line: 'auth    required    pam_oath.so usersfile=/etc/liboath/users.oath window=10 digits=6'
 
-  - lineinfile:
-      path: /etc/pam.d/sshd
-      regexp: '^auth       substack     password-auth'
-      line: '#auth       substack     password-auth'
-      backrefs: yes
+#  - lineinfile:
+#      path: /etc/pam.d/sshd
+#      regexp: '^auth       substack     password-auth'
+#      line: '#auth       substack     password-auth'
+#      backrefs: yes
 
   - name: "Updating ssh configuraiton"
     lineinfile:
