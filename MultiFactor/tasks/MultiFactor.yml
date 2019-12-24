@@ -47,11 +47,11 @@
       line: 'ChallengeResponseAuthentication yes'
       backrefs: yes
 
-  - lineinfile:
-      path: /etc/ssh/sshd_config
-      regexp: '^PasswordAuthentication yes'
-      line: 'PasswordAuthentication no'
-      backrefs: yes
+#  - lineinfile:
+#      path: /etc/ssh/sshd_config
+#      regexp: '^PasswordAuthentication yes'
+#      line: 'PasswordAuthentication no'
+#      backrefs: yes
 
   - name: "Ading user to Match user block"
     lineinfile:
