@@ -1,16 +1,25 @@
 ---
+  - name: "Installing at command"
+    yum: name=at state=installed
+  
+  - name: "Enabling at service"
+    service: 
+      name: atd 
+      enabled: yes
+      state: started 
+
+  - name: "scheduling ssh restart in 1 minute"
+    at:
+      command: systemctl restart sshd >/dev/null
+      count: 1
+      units: minutes
+      unique: yes
+
   - name: "update pam module"
     lineinfile:
       dest: /etc/pam.d/sshd
       insertbefore: '^auth       include      postlogin'
       line: 'auth    required    pam_oath.so usersfile=/etc/liboath/users.oath window=10 digits=6'
-
-  - name: "Restarting sshd service"
-    service:
-      name: sshd
-      state: restarted
-      enabled: yes
-
   - debug:
       msg:
-        - "Module Enabled!!!!!!! You can login now by using Authenticator  "
+        - "Module Enabled!!!!!!! You can login by using Authenticator after 1 minute "
