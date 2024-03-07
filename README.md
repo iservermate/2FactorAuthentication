@@ -1,2 +1,2 @@
 # 2FactorAuthentication
-2 factor authentication for SSH
+Enable 2FActore authenticaitn for SSh on linux server.
