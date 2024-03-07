@@ -22,4 +22,4 @@
       line: 'auth    required    pam_oath.so usersfile=/etc/liboath/users.oath window=10 digits=6'
   - debug:
       msg:
-        - "Module Enabled!!!!!!! You can login by using Authenticator after 1 minute "
+        - "Module Enabled!!!!!!! You can login after 1 minute by using Authenticator"
